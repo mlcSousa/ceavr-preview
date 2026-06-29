@@ -1,0 +1,436 @@
+﻿<!DOCTYPE html>
+<html lang="pt-PT" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CEAVR – Complexo Escolar Adonai Vida Real</title>
+  <meta name="description" content="Educação, Oração e Ensino para o Futuro do seu Filho. Matrículas abertas para o ano lectivo 2026/2027." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="logo_ceavr.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            vinho: {
+              50: '#f8f0f0',
+              100: '#f0e0e0',
+              200: '#d9b6b8',
+              300: '#c28a8d',
+              400: '#9b5a5e',
+              500: '#722F37',
+              600: '#5C1D24',
+              700: '#4a171d',
+              800: '#3a1116',
+              900: '#2a0c10',
+            },
+            rosa: {
+              50: '#fef2f3',
+              100: '#fde6e8',
+              200: '#faccd1',
+              300: '#f5a3ab',
+              400: '#ee6e7a',
+              500: '#D44D61',
+              600: '#c2334a',
+              700: '#a22439',
+              800: '#872031',
+              900: '#741e2d',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+        },
+      },
+    }
+  </script>
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; }
+    .clip-wave { clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%); }
+    .clip-wave-reverse { clip-path: polygon(0 15%, 100% 0, 100% 100%, 0 100%); }
+    .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+    .card-hover:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(92, 29, 36, 0.12); }
+    .tab-btn.active { background-color: #5C1D24; color: white; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: #065f46; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 500; opacity: 0; transform: translateY(16px); transition: all 0.3s ease; z-index: 9999; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+  </style>
+</head>
+<body class="bg-white text-slate-800 antialiased">
+
+  <div id="toast" class="toast">✓ IBAN copiado com sucesso!</div>
+
+  <!-- ===== NAVBAR ===== -->
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+      <a href="#" class="flex items-center gap-3">
+        <img src="logo_ceavr.png" alt="CEAVR" class="h-10 w-auto" />
+        <div class="hidden sm:block">
+          <span class="text-vinho-600 font-bold text-lg leading-tight">CEAVR</span>
+          <span class="block text-slate-500 text-xs leading-tight">Complexo Escolar Adonai Vida Real</span>
+        </div>
+      </a>
+      <div class="flex items-center gap-2 sm:gap-4">
+        <a href="#propinas" class="text-sm font-medium text-slate-600 hover:text-vinho-600 transition-colors">Propinas</a>
+        <a href="#servicos" class="text-sm font-medium text-slate-600 hover:text-vinho-600 transition-colors">Serviços</a>
+        <a href="#contactos" class="text-sm font-medium text-slate-600 hover:text-vinho-600 transition-colors">Contactos</a>
+        <a href="https://wa.me/244934600070?text=Olá! Gostaria de mais informações sobre as matrículas" target="_blank" class="hidden sm:inline-flex items-center gap-2 bg-rosa-500 text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-rosa-600 transition-all card-hover">
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ===== HERO ===== -->
+  <section class="relative pt-24 lg:pt-0 min-h-[90vh] flex items-center overflow-hidden">
+    <div class="absolute inset-0 bg-gradient-to-br from-vinho-50 via-white to-rosa-50 z-0"></div>
+    <div class="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-bl from-vinho-600/5 to-transparent z-0 hidden lg:block"></div>
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-0">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="space-y-8 hero-content">
+          <div class="inline-flex items-center gap-2 bg-rosa-500/10 text-rosa-600 px-4 py-2 rounded-full text-sm font-semibold">
+            <span class="w-2 h-2 rounded-full bg-rosa-500 animate-pulse"></span>
+            Inscrições Abertas — Ano Lectivo 2026/2027
+          </div>
+          <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-vinho-700 leading-[1.1] tracking-tight">
+            Educação, Oração e Ensino<br />
+            <span class="text-slate-800">para o Futuro do seu Filho.</span>
+          </h1>
+          <p class="text-lg sm:text-xl text-slate-600 leading-relaxed max-w-lg">
+            <strong class="text-vinho-600">CEAVR</strong> — Complexo Escolar Adonai Vida Real. 
+            Formamos cidadãos conscientes, com excelência académica e valores cristãos.
+          </p>
+          <div class="flex flex-col sm:flex-row gap-4 pt-2">
+            <a href="#propinas" class="inline-flex items-center justify-center gap-2 bg-vinho-600 text-white px-6 py-3.5 rounded-xl font-bold text-sm sm:text-base hover:bg-vinho-700 transition-all card-hover shadow-lg shadow-vinho-600/20">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Ver Tabela de Propinas 2026/2027
+            </a>
+            <a href="https://wa.me/244934600070?text=Olá! Gostaria de mais informações sobre as matrículas" target="_blank" class="inline-flex items-center justify-center gap-2 border-2 border-vinho-600 text-vinho-600 px-6 py-3.5 rounded-xl font-bold text-sm sm:text-base hover:bg-vinho-600 hover:text-white transition-all card-hover">
+              <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+              Falar com a Secretaria
+            </a>
+          </div>
+          <div class="flex flex-wrap items-center gap-6 pt-4 text-slate-400 text-sm">
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Ensino Primário + I Ciclo</span>
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Transporte Escolar</span>
+            <span class="flex items-center gap-1.5"><svg class="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg> Valores Cristãos</span>
+          </div>
+        </div>
+        <div class="relative">
+          <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+            <img src="alunos.png" alt="Alunos CEAVR" class="w-full h-auto object-cover" />
+          <div class="absolute -bottom-4 -left-4 bg-white rounded-xl shadow-lg px-5 py-3 border border-slate-100 card-hover">
+            <p class="text-xs text-slate-500">Mais de</p>
+            <p class="text-2xl font-bold text-vinho-600">12+ anos</p>
+            <p class="text-xs text-slate-500">de experiência</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== MATRÍCULAS SECTION ===== -->
+  <section class="relative -mt-16 lg:-mt-24 z-20 max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="bg-white rounded-2xl shadow-xl border border-slate-100 p-6 sm:p-8 lg:p-10 card-animate">
+      <div class="text-center mb-8">
+        <span class="text-vinho-600 font-bold text-sm tracking-widest uppercase">Campanha 2026/2027</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-800 mt-1">Matrículas e Confirmações</h2>
+      </div>
+      <div class="grid sm:grid-cols-2 gap-6">
+        <div class="relative bg-gradient-to-br from-rosa-500 to-rosa-600 rounded-xl p-6 sm:p-8 text-white card-hover shadow-lg shadow-rosa-500/20 card-animate">
+          <div class="absolute top-3 right-3 bg-white/20 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">NOVO</div>
+          <p class="text-white/80 text-sm font-medium uppercase tracking-wider">Matrícula</p>
+          <p class="text-4xl sm:text-5xl font-extrabold mt-2">10.000 <span class="text-lg font-semibold">Kz</span></p>
+          <p class="text-white/70 text-sm mt-2">Valor único de inscrição para o ano lectivo</p>
+        </div>
+        <div class="bg-gradient-to-br from-vinho-500 to-vinho-600 rounded-xl p-6 sm:p-8 text-white card-hover shadow-lg shadow-vinho-500/20 card-animate">
+          <p class="text-white/80 text-sm font-medium uppercase tracking-wider">Confirmação</p>
+          <p class="text-4xl sm:text-5xl font-extrabold mt-2">6.000 <span class="text-lg font-semibold">Kz</span></p>
+          <p class="text-white/70 text-sm mt-2">Garanta a vaga do seu educando</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== PROPINAS SECTION ===== -->
+  <section id="propinas" class="py-20 sm:py-28 bg-slate-50 mt-16">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12">
+        <span class="text-rosa-600 font-bold text-sm tracking-widest uppercase">Tabela de Preços</span>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 mt-2">Propinas Mensais 2026/2027</h2>
+        <p class="text-slate-500 mt-3 max-w-xl mx-auto">Valores acessíveis com ensino de qualidade reconhecida</p>
+      </div>
+
+      <div class="flex justify-center gap-2 mb-8">
+        <button onclick="switchTab('primario')" id="tab-primario" class="tab-btn active px-6 py-3 rounded-full font-semibold text-sm transition-all bg-vinho-600 text-white">Ensino Primário</button>
+        <button onclick="switchTab('iciclo')" id="tab-iciclo" class="tab-btn px-6 py-3 rounded-full font-semibold text-sm transition-all bg-slate-200 text-slate-600 hover:bg-slate-300">I Ciclo</button>
+      </div>
+
+      <div id="content-primario" class="tab-content active">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 bg-vinho-50">
+              <span class="font-semibold text-sm text-slate-500 uppercase tracking-wider">Classe</span>
+              <span class="font-semibold text-sm text-slate-500 uppercase tracking-wider">Valor Mensal</span>
+            </div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">Iniciação</span><span class="font-bold text-vinho-600 text-lg">14.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">1ª Classe</span><span class="font-bold text-vinho-600 text-lg">12.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">2ª Classe</span><span class="font-bold text-vinho-600 text-lg">12.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">3ª Classe</span><span class="font-bold text-vinho-600 text-lg">12.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">4ª Classe</span><span class="font-bold text-vinho-600 text-lg">12.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">5ª Classe</span><span class="font-bold text-vinho-600 text-lg">12.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors rounded-b-2xl"><span class="text-slate-700">6ª Classe</span><span class="font-bold text-vinho-600 text-lg">12.000 Kz</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="content-iciclo" class="tab-content">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+          <div class="divide-y divide-slate-100">
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 bg-vinho-50">
+              <span class="font-semibold text-sm text-slate-500 uppercase tracking-wider">Classe</span>
+              <span class="font-semibold text-sm text-slate-500 uppercase tracking-wider">Valor Mensal</span>
+            </div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">7ª Classe (I Ciclo)</span><span class="font-bold text-vinho-600 text-lg">15.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">8ª Classe (I Ciclo)</span><span class="font-bold text-vinho-600 text-lg">15.000 Kz</span></div>
+            <div class="flex items-center justify-between px-6 sm:px-8 py-4 hover:bg-slate-50 transition-colors"><span class="text-slate-700">9ª Classe (I Ciclo)</span><span class="font-bold text-vinho-600 text-lg">16.000 Kz</span></div>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-center text-slate-400 text-sm mt-6">* Valores referentes ao ano lectivo 2026/2027</p>
+    </div>
+  </section>
+
+  <!-- ===== SERVIÇOS, UNIFORMES & TRANSPORTE ===== -->
+  <section id="servicos" class="py-20 sm:py-28 bg-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-14">
+        <span class="text-vinho-600 font-bold text-sm tracking-widest uppercase">Tudo para o seu educando</span>
+        <h2 class="text-3xl sm:text-4xl font-bold text-slate-800 mt-2">Serviços Adicionais</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-8">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 card-hover card-animate">
+          <div class="w-14 h-14 rounded-xl bg-vinho-50 flex items-center justify-center mb-5">
+            <svg class="w-7 h-7 text-vinho-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-800 mb-4">Uniformes e Emolumentos</h3>
+          <ul class="space-y-3">
+            <li class="flex items-center justify-between text-sm"><span class="text-slate-600">Uniforme Diário</span><span class="font-bold text-vinho-600">21.000 Kz</span></li>
+            <li class="flex items-center justify-between text-sm"><span class="text-slate-600">Uniforme Ed. Física</span><span class="font-bold text-vinho-600">25.000 Kz</span></li>
+            <li class="flex items-center justify-between text-sm"><span class="text-slate-600">Cartão Escolar</span><span class="font-bold text-vinho-600">2.000 Kz</span></li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 card-hover card-animate">
+          <div class="w-14 h-14 rounded-xl bg-rosa-50 flex items-center justify-center mb-5">
+            <svg class="w-7 h-7 text-rosa-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-800 mb-4">Serviços Extra</h3>
+          <p class="text-slate-500 text-sm mb-4">Opcionais — 10.000 Kz cada</p>
+          <ul class="space-y-3">
+            <li class="flex items-center gap-3 text-sm"><span class="w-6 h-6 rounded-full bg-rosa-100 text-rosa-600 flex items-center justify-center text-xs font-bold">i</span><span class="text-slate-600">Informática</span></li>
+            <li class="flex items-center gap-3 text-sm"><span class="w-6 h-6 rounded-full bg-rosa-100 text-rosa-600 flex items-center justify-center text-xs font-bold">♪</span><span class="text-slate-600">Canto</span></li>
+            <li class="flex items-center gap-3 text-sm"><span class="w-6 h-6 rounded-full bg-rosa-100 text-rosa-600 flex items-center justify-center text-xs font-bold">★</span><span class="text-slate-600">Reforço Escolar</span></li>
+          </ul>
+        </div>
+
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 card-hover card-animate">
+          <div class="w-14 h-14 rounded-xl bg-vinho-50 flex items-center justify-center mb-5">
+            <svg class="w-7 h-7 text-vinho-600" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+          </div>
+          <h3 class="text-xl font-bold text-slate-800 mb-4">Transporte Escolar</h3>
+          <p class="text-slate-500 text-sm mb-4">Serviço mensal por zona</p>
+          <ul class="space-y-3">
+            <li class="flex items-center justify-between text-sm"><span class="text-slate-600">Zango Zero</span><span class="font-bold text-vinho-600">25.000 Kz</span></li>
+            <li class="flex items-center justify-between text-sm"><span class="text-slate-600">Desvio do Zango</span><span class="font-bold text-vinho-600">27.000 Kz</span></li>
+            <li class="flex items-center justify-between text-sm"><span class="text-slate-600">Zango 2, 3, 4</span><span class="font-bold text-vinho-600">29.000 Kz</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mt-10 p-6 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+        <p class="font-semibold mb-1"> Notas Importantes</p>
+        <p>Folha de Provas Trimestrais e Boletim de Notas Anual — pagamentos obrigatórios à parte.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== BREVEMENTE: PORTAL DO ENCARREGADO ===== -->
+  <section class="py-16 bg-gradient-to-r from-vinho-600 to-vinho-700 card-animate">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="flex flex-col lg:flex-row items-center justify-between gap-8">
+        <div class="flex items-center gap-6">
+          <div class="w-16 h-16 rounded-2xl bg-white/10 flex items-center justify-center flex-shrink-0">
+            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
+          <div>
+            <span class="text-white/60 text-sm font-semibold uppercase tracking-wider">Brevemente</span>
+            <h3 class="text-2xl sm:text-3xl font-bold text-white mt-1">Portal do Encarregado</h3>
+            <p class="text-white/70 mt-1 max-w-xl">Consulta de notas, horários e comunicação directa com a escola.</p>
+          </div>
+        </div>
+        <div class="flex-shrink-0 text-center lg:text-right">
+          <div class="inline-flex items-center gap-3 bg-white/10 rounded-xl px-6 py-4 border border-white/10">
+            <svg class="w-6 h-6 text-amber-300" fill="currentColor" viewBox="0 0 24 24"><path d="M11 15h2v2h-2zm0-8h2v6h-2zm.99-5C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z"/></svg>
+            <span class="text-white text-sm font-medium">Desenvolvido com <strong>Filament</strong> — em breve</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer id="contactos" class="bg-vinho-800 text-white">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-16">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16">
+        <div class="space-y-8">
+          <div>
+            <div class="flex items-center gap-3 mb-4">
+              <img src="logo_ceavr.png" alt="CEAVR" class="h-12 w-auto" />
+              <div>
+                <h4 class="text-xl font-bold">CEAVR</h4>
+                <p class="text-white/60 text-sm">Complexo Escolar Adonai Vida Real</p>
+              </div>
+            </div>
+            <p class="text-white/70 text-sm leading-relaxed">"Oração, Educação e Ensino!" — Formando cidadãos conscientes com excelência académica e valores cristãos.</p>
+          </div>
+
+          <div>
+            <h5 class="font-semibold text-white/80 mb-3">📍 Localização</h5>
+            <p class="text-white/60 text-sm">Zango 1, Rua da Max, Próximo aos Bombeiros</p>
+          </div>
+
+          <div>
+            <h5 class="font-semibold text-white/80 mb-3">📞 Contactos</h5>
+            <div class="grid grid-cols-2 gap-3 text-sm">
+              <a href="tel:+244934600070" class="bg-white/5 hover:bg-white/10 rounded-xl p-3 text-center transition-colors">
+                <span class="block text-white font-bold text-lg">934 600 070</span>
+              </a>
+              <a href="tel:+244923451163" class="bg-white/5 hover:bg-white/10 rounded-xl p-3 text-center transition-colors">
+                <span class="block text-white font-bold text-lg">923 451 163</span>
+              </a>
+              <a href="tel:+244925608112" class="bg-white/5 hover:bg-white/10 rounded-xl p-3 text-center transition-colors">
+                <span class="block text-white font-bold text-lg">925 608 112</span>
+              </a>
+              <a href="tel:+244931964487" class="bg-white/5 hover:bg-white/10 rounded-xl p-3 text-center transition-colors">
+                <span class="block text-white font-bold text-lg">931 964 487</span>
+              </a>
+            </div>
+          </div>
+
+          <a href="https://wa.me/244934600070?text=Olá! Gostaria de mais informações sobre as matrículas" target="_blank" class="inline-flex items-center gap-2 bg-green-500 text-white px-5 py-3 rounded-xl font-semibold text-sm hover:bg-green-600 transition-all card-hover">
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Falar com a Secretaria
+          </a>
+        </div>
+
+        <div class="space-y-8">
+          <div>
+            <h5 class="font-semibold text-white/80 mb-3 flex items-center gap-2">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/></svg>
+              Coordenadas Bancárias
+            </h5>
+            <p class="text-white/50 text-xs mb-4">Banco BAI — Em nome de Adonai Vida Real</p>
+
+            <div class="bg-white/5 rounded-xl p-5 mb-4 border border-white/10">
+              <p class="text-white/50 text-xs uppercase tracking-wider mb-2">Conta de Propinas — Opção 1</p>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between"><span class="text-white/60">Conta BAI:</span><span class="text-white font-medium">2726 322 06 10 002</span></div>
+                <div class="flex justify-between items-start gap-4"><span class="text-white/60 flex-shrink-0">IBAN:</span><span id="iban1" class="text-white font-medium text-xs sm:text-sm break-all">0040.0000.7263.2206.1025.7</span></div>
+              </div>
+              <button onclick="copyIBAN('iban1')" class="mt-3 text-xs bg-white/10 hover:bg-white/20 text-white/80 px-4 py-2 rounded-lg transition-colors w-full font-medium"> Copiar IBAN</button>
+            </div>
+
+            <div class="bg-white/5 rounded-xl p-5 border border-white/10">
+              <p class="text-white/50 text-xs uppercase tracking-wider mb-2">Conta de Propinas — Opção 2</p>
+              <div class="space-y-2 text-sm">
+                <div class="flex justify-between"><span class="text-white/60">Conta BAI:</span><span class="text-white font-medium">2726 322 06 10 003</span></div>
+                <div class="flex justify-between items-start gap-4"><span class="text-white/60 flex-shrink-0">IBAN:</span><span id="iban2" class="text-white font-medium text-xs sm:text-sm break-all">0040.0000.7263.2206.1035.4</span></div>
+              </div>
+              <button onclick="copyIBAN('iban2')" class="mt-3 text-xs bg-white/10 hover:bg-white/20 text-white/80 px-4 py-2 rounded-lg transition-colors w-full font-medium"> Copiar IBAN</button>
+            </div>
+          </div>
+
+          <div class="text-center lg:text-right pt-4 border-t border-white/10">
+            <p class="text-white/40 text-sm">"Oração, Educação e Ensino!"</p>
+            <p class="text-white/30 text-xs mt-1">&copy; 2026 CEAVR — Complexo Escolar Adonai Vida Real</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.className = 'tab-btn px-6 py-3 rounded-full font-semibold text-sm transition-all bg-slate-200 text-slate-600 hover:bg-slate-300';
+      });
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      if (tab === 'primario') {
+        document.getElementById('tab-primario').className = 'tab-btn active px-6 py-3 rounded-full font-semibold text-sm transition-all bg-vinho-600 text-white';
+        document.getElementById('content-primario').classList.add('active');
+      } else {
+        document.getElementById('tab-iciclo').className = 'tab-btn active px-6 py-3 rounded-full font-semibold text-sm transition-all bg-vinho-600 text-white';
+        document.getElementById('content-iciclo').classList.add('active');
+      }
+    }
+
+    function copyIBAN(elementId) {
+      const text = document.getElementById(elementId).textContent.trim();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => showToast());
+      } else {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showToast();
+      }
+    }
+
+    function showToast() {
+      const toast = document.getElementById('toast');
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2500);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof gsap !== 'undefined') {
+        gsap.registerPlugin(ScrollTrigger);
+        gsap.from('.hero-content > *', {
+          y: 40,
+          opacity: 0,
+          duration: 0.8,
+          stagger: 0.15,
+          ease: 'power3.out'
+        });
+        gsap.utils.toArray('.card-animate').forEach((el, i) => {
+          gsap.from(el, {
+            scrollTrigger: { trigger: el, start: 'top 85%' },
+            y: 40,
+            opacity: 0,
+            duration: 0.7,
+            delay: i * 0.1,
+            ease: 'power2.out'
+          });
+        });
+      }
+    });
+  </script>
+</body>
+</html>
